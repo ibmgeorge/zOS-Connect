@@ -1,10 +1,16 @@
-Header:
+#Sample JWT used here
+
+Can be generated & verified from [jwt.io].
+
+*Header:*
+```json
 {
   "alg": "RS256",
   "typ": "JWT"
 }
 
-Body:
+```json
+*Body:*
 {
   "token_type": "Bearer",
   "aud": "zCEE",
@@ -15,11 +21,13 @@ Body:
   "iat": 1581472269
 }
 
+#Commands to extract public / private key from the certificate.
+```
 [george@thinkpad-p50 intermediate]$ openssl rsa -in private/jwt.key.pem -outform PEM
 writing RSA key
 [george@thinkpad-p50 intermediate]$ openssl rsa -in private/jwt.key.pem -pubout -outform PEM
 writing RSA key
-
+```
 
 
 
