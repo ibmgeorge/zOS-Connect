@@ -1,16 +1,17 @@
-#Sample JWT used here
+# Sample JWT used here
 
 Can be generated & verified from [jwt.io].
 
-*Header:*
+** Header: **
 ```json
 {
   "alg": "RS256",
   "typ": "JWT"
 }
+```
 
+** Body: **
 ```json
-*Body:*
 {
   "token_type": "Bearer",
   "aud": "zCEE",
@@ -20,8 +21,8 @@ Can be generated & verified from [jwt.io].
   "exp": 1681479469,
   "iat": 1581472269
 }
-
-#Commands to extract public / private key from the certificate.
+```
+# Commands to extract public / private key from the certificate.
 ```
 [george@thinkpad-p50 intermediate]$ openssl rsa -in private/jwt.key.pem -outform PEM
 writing RSA key
