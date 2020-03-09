@@ -1,8 +1,8 @@
 # Sample JWT used here
 
-Can be generated & verified from [jwt.io].
+Can be generated & verified from https://jwt.io 
 
-** Header: **
+**Header**
 ```json
 {
   "alg": "RS256",
@@ -10,7 +10,7 @@ Can be generated & verified from [jwt.io].
 }
 ```
 
-** Body: **
+**Body**
 ```json
 {
   "token_type": "Bearer",
