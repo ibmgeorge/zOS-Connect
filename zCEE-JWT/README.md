@@ -22,7 +22,7 @@ Can be generated & verified from https://jwt.io
   "iat": 1581472269
 }
 ```
-# Commands to extract public / private key from the certificate.
+## Commands to extract public / private key from the certificate.
 ```
 [george@thinkpad-p50 intermediate]$ openssl rsa -in private/jwt.key.pem -outform PEM
 writing RSA key
