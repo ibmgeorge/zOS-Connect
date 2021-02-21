@@ -1,0 +1,143 @@
+<dashboard theme="light">
+  <label>Demo - z/OS Connect EE + CICS [George]</label>
+  <row>
+    <panel>
+      <chart>
+        <title>API Throughput</title>
+        <search>
+          <query>sourcetype="zos-smf_123_01_kv" | stats count as "API Per Minute"</query>
+          <earliest>rt-1m</earliest>
+          <latest>rt</latest>
+          <refresh>30s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.chart">radialGauge</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="refresh.display">preview</option>
+        <option name="trellis.enabled">0</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>API Usage Volume</title>
+        <search>
+          <query>sourcetype="zos-smf_123_01_kv" | timechart count(SM123SSI) by API_SERVICE_NAME span=1m</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisEnd</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Service Response Time</title>
+        <search>
+          <query>sourcetype="zos-smf_123*" | convert mktime(TIME_ZC_EXIT) mktime(TIME_ZC_ENTRY) timeformat="%Y-%m-%d %H:%M:%S.%6Q" | eval resp=TIME_ZC_EXIT-TIME_ZC_ENTRY | timechart avg(resp) as "Response Time" span=1m by API_SERVICE_NAME</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisY.abbreviation">auto</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>API URI Distribution</title>
+        <search>
+          <query>sourcetype="zos-smf_123*" |  stats count(SM123SSI) by REQ_TARGET_URI</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>API End User Distribution from JWT Token</title>
+        <search>
+          <query>sourcetype="zos-smf_123_01_kv" "api_service_name=queryaccservice" | chart count(USER_NAME) as "User" over USER_NAME by API_SERVICE_NAME</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>CICS Transaction Response Time</title>
+        <search>
+          <query>sourcetype="zos-smf_110_1_kpi_kv" | where (TRANSACTION_ID like "ZCE%" or TRANSACTION_ID="CSMI") | timechart avg(ELAPSED_TIME) as "Response Time" span=1m by TRANSACTION_ID</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>1m</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>CICS Service Program Count</title>
+        <search>
+          <query>sourcetype="zos-smf_110_1_kpi_kv" | where (TRANSACTION_ID like "ZCE%" or TRANSACTION_ID="CSMI") | chart count(PGM_NAME) as "Program" by PGM_NAME</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+          <refreshType>delay</refreshType>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
